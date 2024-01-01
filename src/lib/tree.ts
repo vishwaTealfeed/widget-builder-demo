@@ -19,16 +19,6 @@ export const ROOT_NODE_LAYOUT = ELEMENT_CONFIG.container.generateInitialStyleCon
   },
 })
 
-export function gatherAllParent(elementId: string, elementTree: Record<string, string[]>) {
-  const parents: string[] = []
-  let parent = getParentNode(elementId, elementTree)
-  while (parent) {
-    parents.push(parent)
-    parent = getParentNode(parent, elementTree)
-  }
-  return parents
-}
-
 export function gatherAllChildren(
   elementId: string,
   elementTree: Record<string, string[]>,
@@ -37,12 +27,10 @@ export function gatherAllChildren(
   if (elementsType[elementId] !== 'container') {
     return []
   }
-
   const children = [
     ...elementTree[elementId],
     ...elementTree[elementId].flatMap((childId) => gatherAllChildren(childId, elementTree, elementsType)),
   ]
-
   return children
 }
 
@@ -51,7 +39,6 @@ export function getParentNode(elementId: string, elementTree: Record<string, str
     return undefined
   }
   const nodesToCheck = [rootId]
-
   while (nodesToCheck.length) {
     const node = nodesToCheck.shift()!
     const children = elementTree[node] ?? []
@@ -60,8 +47,17 @@ export function getParentNode(elementId: string, elementTree: Record<string, str
     }
     nodesToCheck.push(...children)
   }
-
   return undefined
+}
+
+export function gatherAllParent(elementId: string, elementTree: Record<string, string[]>) {
+  const parents: string[] = []
+  let parent = getParentNode(elementId, elementTree)
+  while (parent) {
+    parents.push(parent)
+    parent = getParentNode(parent, elementTree)
+  }
+  return parents
 }
 
 export function buildElementTree(

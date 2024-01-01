@@ -2,53 +2,32 @@ generator client {
   provider = "prisma-client-js"
 }
 
-datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+model Widget {
+  id                       String        @id @default(auto()) @map("_id") @db.ObjectId
+  name                     String
+  previewUri               String
+  elementTree              Json          @default("{}")
+  elementsLayout           Json?         @default("{}")
+  responsiveElementsLayout Json          @default("{}")
+  elementsType             Json          @default("{}")
+  elementsName             Json          @default("{}")
+  elementsData             Json          @default("{}")
+  elementsVariable         Json          @default("{}")
+  widgetType               WidgetType?   @relation(fields: [widgetTypeId], references: [id])
+  widgetTypeId             String?       @db.ObjectId
+  publishStatus            PublishStatus @default(DRAFT)
+  isDeleted                Boolean       @default(false)
 }
 
-model Account {
-  id                String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId            String  @db.ObjectId
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
+model Image {
+  id  String @id @default(auto()) @map("_id") @db.ObjectId
+  url String
 }
 
-model Session {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  sessionToken String   @unique
-  userId       String   @db.ObjectId
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  accounts      Account[]
-  sessions      Session[]
-}
-
-model VerificationToken {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
+model WidgetType {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  widgets       Widget[]
+  publishStatus PublishStatus @default(DRAFT)
+  isDeleted     Boolean       @default(false)
 }
