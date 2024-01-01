@@ -25,6 +25,7 @@ export type FontFamilyData = {
 
 export function gatherAllFonts(config: Record<string, ResponsiveLayoutConfig>) {
   const allLayout = Object.entries(config)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     .flatMap(([_, value]) => Object.values(value))
     .filter(Boolean)
   const fontFamilies = new Set<string>()
