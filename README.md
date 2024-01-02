@@ -12,6 +12,4 @@ pnpm install
 
 [`pnpm`](https://pnpm.io/installation) is the preferred package manager for this project.
 
-### Environment Variables
-
-This project uses environment variables to configure the credentials. To get started please copy the `.env.example` into `.env` file.
+authots -
